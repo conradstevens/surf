@@ -1,39 +1,64 @@
+#include <stdio.h>
+#define GL_SILENCE_DEPRECATION
+#define GLFW_INCLUDE_NONE  //  Ensures gl3.h is included rather than gl.h
 #include <iostream>
-#include "GLFW/glfw3.h"
-#include "head.h"
+#include <GLFW/glfw3.h>  // OpenGL includes after include glfw3
+#include <OpenGL/gl3.h>
+#include "glfw_ancillary.h"
+#include "mesh.h"
 
-int main(void)
+
+int main()
 {
-    GLFWwindow* window;
+    GLFWwindow* window = initWindow();
 
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
+    // Vertex data and buffer
+    const int len_vertices = 9;
+    float vertices[len_vertices] = {
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f,  0.5f, 0.0f
+    };
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
+    const char* vertexShaderSource = "#version 410 core\n"
+    "layout (location = 0) in vec3 aPos;\n"
+    "void main()\n"
+    "{\n"
+    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    "}\0";
 
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
+    const char* fragmentShaderSource = "#version 410 core\n"
+    "out vec4 FragColor;\n"
+    "void main()\n"
+    "{\n"
+    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "}\0";
 
-    /* Loop until the user closes the window */
+    Mesh mesh(vertexShaderSource, fragmentShaderSource, vertices, len_vertices);
+    mesh.bindToGPU();
+
+    // Loop until the user closes the window
     while (!glfwWindowShouldClose(window))
     {
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+        // Resize the viewport
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
+        glViewport(0, 0, width, height);
 
-        /* Swap front and back buffers */
+        // OpenGL Rendering related code
+        glClear(GL_COLOR_BUFFER_BIT);
+        glUseProgram(mesh.program);
+        glBindVertexArray(mesh.VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        // Swap front and back buffers
         glfwSwapBuffers(window);
 
-        /* Poll for and process events */
+        // Poll for and process events
         glfwPollEvents();
     }
 
+    glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
 }
