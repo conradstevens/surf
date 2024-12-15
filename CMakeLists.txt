@@ -7,17 +7,16 @@ project(surf)
 # Executables
 add_executable(${PROJECT_NAME}
         # lib headers
-        include/opengl_rendering.h
         # My files
         src/main.cpp
         include/glfw_ancillary.h
-        src/glfw_ancillary.cpp
-        include/opengl_rendering.h
-        src/opengl_rendering.cpp
+            src/glfw_ancillary.cpp
         include/ball.h
-        src/ball.cpp
-        src/mesh.cpp
-        src/mesh.h
+            src/ball.cpp
+        include/mesh.h
+            src/mesh.cpp
+        include/shader.h
+            src/shader.cpp
 )
 
 

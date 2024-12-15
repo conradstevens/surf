@@ -1,15 +1,16 @@
 #include <iostream>
 #define GL_SILENCE_DEPRECATION
+#define GLFW_INCLUDE_NONE  //  Ensures gl3.h is included rather than gl.h
 #include <GLFW/glfw3.h>  // OpenGL includes after include glfw3
 #include <OpenGL/gl3.h>
+#include <iostream>
 #include "mesh.h"
 
 
-Mesh::Mesh(const char *vertex_shader_source, const char *fragment_shader_source, float *vertices, int len_vertices) :
-    vertices(vertices),
-    len_vertices(len_vertices),
-    size_of_vertices(len_vertices * sizeof(float)){
-    createProgram(vertex_shader_source, fragment_shader_source);
+Mesh::Mesh(std::vector<float>& vertices, Shader& shader) :
+    shader(shader),
+    vertices(std::move(vertices)),
+    program(createProgram(shader.vertex_shader_source, shader.fragment_shader_source)){
 }
 
 void Mesh::bindToGPU() {
@@ -19,35 +20,37 @@ void Mesh::bindToGPU() {
 
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, size_of_vertices, vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, shader.vertex_size, GL_FLOAT, GL_FALSE, shader.vertex_float_stride,
+        (void*)0);
     glEnableVertexAttribArray(0);
 }
 
-void Mesh::createProgram(const char* vertex_shader_source, const char* fragment_shader_source) {
-    program = glCreateProgram();
+GLuint Mesh::createProgram(const char* vertex_shader_source, const char* fragment_shader_source) {
+    GLuint _program = glCreateProgram();
     GLuint vertex_shader = compileShader(GL_VERTEX_SHADER, vertex_shader_source);
     GLuint fragment_shader = compileShader(GL_FRAGMENT_SHADER, fragment_shader_source);
 
-    glAttachShader(program, vertex_shader);
-    glAttachShader(program, fragment_shader);
-    glLinkProgram(program);
-    glValidateProgram(program);
+    glAttachShader(_program, vertex_shader);
+    glAttachShader(_program, fragment_shader);
+    glLinkProgram(_program);
+    glValidateProgram(_program);
 
     int result;
-    glGetProgramiv(program, GL_LINK_STATUS, &result);
+    glGetProgramiv(_program, GL_LINK_STATUS, &result);
     if(result == GL_FALSE) {
         int length;
-        glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
+        glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &length);
         char* message = (char*)alloca(length * sizeof(char));
-        glGetProgramInfoLog(program, length, &length, message);
+        glGetProgramInfoLog(_program, length, &length, message);
         std::cout << "Failed to compile program" << std::endl;
         std::cout << message << std::endl;
-        glDeleteProgram(program);
+        glDeleteProgram(_program);
     }
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
+    return _program;
 }
 
 GLuint Mesh::compileShader(const GLuint type, const char* source) {

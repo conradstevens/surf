@@ -1,22 +1,23 @@
 #ifndef MESH_H
 #define MESH_H
+#define GL_SILENCE_DEPRECATION
+#include <vector>
+#include "shader.h"
+#include <GLFW/glfw3.h>  // OpenGL includes after include glfw3
 
 class Mesh {
 public:
-    GLuint program{};
-    GLuint VAO{}, VBO{};
+    Shader shader;
+    std::vector<float> vertices;
+    GLuint program, VAO, VBO;
 
-    explicit Mesh(const char* vertex_shader_source, const char* fragment_shader_source, float *vertices, int len_vertices);
+    explicit Mesh(std::vector<float>& vertices, Shader& shader);
 
-    void createProgram(const char* vertex_shader_source, const char* fragment_shader_source);
+    GLuint createProgram(const char* vertex_shader_source, const char* fragment_shader_source);
     void bindToGPU();
 
     static unsigned int compileShader(unsigned int type, const char* source);
 
-protected:
-    float *vertices{};
-    int len_vertices{};
-    int size_of_vertices{};
 };
 
 
