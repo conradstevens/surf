@@ -5,6 +5,7 @@
 
 void glClearError();
 void setCallBacks(GLFWwindow* window);
+void glCheckError();
 GLFWwindow* initWindow();
 
 #endif //GLFW_ANCILLARY_H

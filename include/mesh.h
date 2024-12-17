@@ -9,14 +9,15 @@ class Mesh {
 public:
     Shader shader;
     std::vector<float> vertices;
-    GLuint program, VAO, VBO;
+    std::vector<unsigned int> index_buffer;
+    GLuint program, VAO, VBO, ibo;
 
-    explicit Mesh(std::vector<float>& vertices, Shader& shader);
-
-    GLuint createProgram(const char* vertex_shader_source, const char* fragment_shader_source);
-    void bindToGPU();
+    explicit Mesh(std::vector<float>& vertices, Shader& shader, std::vector<unsigned int> index_buffer={});
 
     static unsigned int compileShader(unsigned int type, const char* source);
+    std::vector<unsigned int> initIndexBuffer(std::vector<unsigned int> index_buffer);
+    GLuint createProgram(const char* vertex_shader_source, const char* fragment_shader_source);
+    void bindToGPU();
 
 };
 

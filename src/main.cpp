@@ -20,15 +20,21 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
         // Resize the viewport
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
-        glViewport(0, 0, width, height);
+        // int width, height;
+        // glfwGetFramebufferSize(window, &width, &height);
+        // glViewport(0, 0, width, height);
 
         // OpenGL Rendering related code
         glClear(GL_COLOR_BUFFER_BIT);
-        glUseProgram(ball.mesh.program);
-        glBindVertexArray(ball.mesh.VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glClearError();
+
+        // glUseProgram(ball.mesh.program);
+        // glBindVertexArray(ball.mesh.VAO);
+        // glDrawArrays(GL_TRIANGLES, 0, 6);  // TODO get vertex count statically
+
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+        glCheckError();
 
         // Swap front and back buffers
         glfwSwapBuffers(window);

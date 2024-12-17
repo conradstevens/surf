@@ -30,7 +30,22 @@ Shader Ball::initShader() {
 Mesh Ball::initMesh() {
     std::vector<float> vertices = {
         -0.5f, -0.5f,
-        0.5f, -0.5f,
-        0.0f,  0.5f};
-    return Mesh(vertices, shader);
+         0.5f, -0.5f,
+         0.5f,  0.5f,
+        -0.5f,  0.5f};
+
+    // std::vector<float> vertices = {
+    //     -0.5f, -0.5f,
+    //      0.5f, -0.5f,
+    //      0.5f,  0.5f,
+    //
+    //      0.5f,  0.5f,
+    //     -0.5f,  0.5f,
+    //     -0.5f, -0.5f};
+
+    std::vector<unsigned int> index_buffer = {
+        0, 1, 2,
+        2, 3, 0};
+
+    return Mesh(vertices, shader, index_buffer);
 }

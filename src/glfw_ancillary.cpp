@@ -22,10 +22,10 @@ static void pose_callback(GLFWwindow* window, int xpos, int ypos) {
     std::cout << "Posed: " << xpos << " x " << ypos << std::endl;
 }
 
-// static helpers
-static void glCheckError() {
+void glCheckError() {
     while (GLenum error = glGetError()) {
         std::cout << "OpenGL Error: " << error << std::endl;
+
     }
 }
 
