@@ -64,8 +64,8 @@ GLuint Mesh::createProgram(const char* vertex_shader_source, const char* fragmen
         std::cout << message << std::endl;
         glDeleteProgram(_program);
     }
-    glDeleteShader(vertex_shader);
-    glDeleteShader(fragment_shader);
+    glDeleteProgram(vertex_shader);
+    glDeleteProgram(fragment_shader);
     return _program;
 }
 
