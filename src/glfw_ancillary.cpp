@@ -50,7 +50,7 @@ GLFWwindow* initWindow() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Create window
-    GLFWwindow* window = glfwCreateWindow(640, 480, "Surf", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(480, 480, "Surf", NULL, NULL);
     if (!window) throw std::runtime_error("GLFW window creation failed");
     glClearError();
     setCallBacks(window);

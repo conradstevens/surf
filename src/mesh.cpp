@@ -3,7 +3,6 @@
 #define GLFW_INCLUDE_NONE  //  Ensures gl3.h is included rather than gl.h
 #include <GLFW/glfw3.h>  // OpenGL includes after include glfw3
 #include <OpenGL/gl3.h>
-#include <iostream>
 #include "mesh.h"
 
 

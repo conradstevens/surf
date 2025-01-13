@@ -5,21 +5,11 @@
 #include "entity.h"
 
 // class Ball : public entity{
-class Ball {
+class Ball : public Entity{
 
-protected:
-    const char* vertexShaderSource;
-    const char* fragmentShaderSource;
-    std::vector<float> vertices;
-    std::vector<unsigned int> index_buffer;
-    Shader initShader();
-    Mesh initMesh();
 
 public:
-    Shader shader;
-    Mesh mesh;
     Ball();
-
 };
 
 
