@@ -9,6 +9,7 @@ public:
   int vertex_float_stride{};
 
   explicit Shader(const char* vertex_shader_source, const char* fragment_shader_source, int vertex_size);
+  Shader() = default;
 };
 
 

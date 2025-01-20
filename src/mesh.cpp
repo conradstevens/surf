@@ -6,9 +6,9 @@
 #include "mesh.h"
 
 
-Mesh::Mesh(std::vector<float>& vertices, Shader& shader, std::vector<unsigned int> index_buffer) :
+Mesh::Mesh(std::vector<float>& vertices, Shader& shader, std::vector<unsigned int>& index_buffer) :
     shader(shader),
-    vertices(std::move(vertices)),
+    vertices(vertices),
     program(createProgram(shader.vertex_shader_source, shader.fragment_shader_source)),
     index_buffer(initIndexBuffer(index_buffer)){
 }
@@ -31,7 +31,7 @@ void Mesh::bindToGPU() {
     glUseProgram(program);
 }
 
-std::vector<unsigned int> Mesh::initIndexBuffer(std::vector<unsigned int> index_buffer) {
+std::vector<unsigned int> Mesh::initIndexBuffer(std::vector<unsigned int>& index_buffer) {
     if (index_buffer.empty()) {
         std::vector<unsigned int> buffer_list (vertices.size());
         for (unsigned int i = 0; i < vertices.size(); i++) {

@@ -7,14 +7,22 @@
 #include <OpenGL/gl3.h>
 #include "glfw_ancillary.h"
 #include "ball.h"
+#include "scene.h"
 
 
 
 int main()
 {
     GLFWwindow* window = initWindow();
+    Scene scene{};
+
+    Ball::load();
     Ball ball{};
-    ball.mesh.bindToGPU();
+
+    scene.addEntity(ball);
+    scene.bindEntities();
+
+    // ball.mesh->bindToGPU();
 
     // Loop until the user closes the window
     while (!glfwWindowShouldClose(window))
@@ -32,7 +40,7 @@ int main()
         // glBindVertexArray(ball.mesh.VAO);
         // glDrawArrays(GL_TRIANGLES, 0, 6);  // TODO get vertex count statically
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, scene.index_count, GL_UNSIGNED_INT, nullptr);
 
         glCheckError();
 

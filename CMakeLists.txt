@@ -19,8 +19,8 @@ add_executable(${PROJECT_NAME}
             src/shader.cpp
         include/scene.h
             src/scene.cpp
-        src/entity.cpp
-        src/entity.h
+        include/entity.h
+            src/entity.cpp
 )
 
 

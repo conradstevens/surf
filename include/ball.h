@@ -4,12 +4,21 @@
 #include "mesh.h"
 #include "entity.h"
 
-// class Ball : public entity{
-class Ball : public Entity{
 
+class Ball : public Entity{
+protected:
+    static const char* vertexShaderSource_static;
+    static const char* fragmentShaderSource_static;
+    static std::vector<float>* vertices_static;
+    static std::vector<unsigned int>* index_buffer_static;
 
 public:
+    static Shader shader_static;
+    static Mesh mesh_static;
+
     Ball();
+    static void load();
+    static void unload();
 };
 
 
