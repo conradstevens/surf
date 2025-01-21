@@ -6,7 +6,7 @@ Scene::Scene() :
 
 void Scene::addEntity(Entity entity){
     entities.push_back(entity);
-    index_count += entity.mesh->index_buffer.size();
+    index_count += entity.mesh->index_buffer->size();
 }
 
 void Scene::bindEntities() {

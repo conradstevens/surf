@@ -6,11 +6,11 @@
 #include "mesh.h"
 
 
-Mesh::Mesh(std::vector<float>& vertices, Shader& shader, std::vector<unsigned int>& index_buffer) :
+Mesh::Mesh(std::vector<float>* vertices, Shader& shader, std::vector<unsigned int>* index_buffer) :
     shader(shader),
     vertices(vertices),
     program(createProgram(shader.vertex_shader_source, shader.fragment_shader_source)),
-    index_buffer(initIndexBuffer(index_buffer)){
+    index_buffer(index_buffer){
 }
 
 void Mesh::bindToGPU() {
@@ -19,27 +19,16 @@ void Mesh::bindToGPU() {
 
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices->size() * sizeof(float), vertices->data(), GL_STATIC_DRAW);
 
     glGenBuffers(1, &ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer.size() * sizeof(unsigned int), index_buffer.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer->size() * sizeof(unsigned int), index_buffer->data(), GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, shader.vertex_size, GL_FLOAT, GL_FALSE, shader.vertex_float_stride, (void*)0);
     glEnableVertexAttribArray(0);
 
     glUseProgram(program);
-}
-
-std::vector<unsigned int> Mesh::initIndexBuffer(std::vector<unsigned int>& index_buffer) {
-    if (index_buffer.empty()) {
-        std::vector<unsigned int> buffer_list (vertices.size());
-        for (unsigned int i = 0; i < vertices.size(); i++) {
-            buffer_list[i] = i;
-        }
-    return buffer_list;
-    }
-    return index_buffer;
 }
 
 GLuint Mesh::createProgram(const char* vertex_shader_source, const char* fragment_shader_source) {

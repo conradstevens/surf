@@ -42,7 +42,7 @@ void Ball::load() {
 
     shader_static = Shader(vertexShaderSource_static, fragmentShaderSource_static, 2);
     // TODO Pass in vector pointers insted of dereferencing or find a way not to copy the vectors.
-    mesh_static = Mesh(*vertices_static, shader_static, *index_buffer_static);
+    mesh_static = Mesh(vertices_static, shader_static, index_buffer_static);
 }
 
 void Ball::unload() {
