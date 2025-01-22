@@ -10,8 +10,9 @@ const char* Ball::vertexShaderSource_static;
 const char* Ball::fragmentShaderSource_static;
 std::vector<float>* Ball::vertices_static;
 std::vector<unsigned int>* Ball::index_buffer_static;
+std::vector<float>* Ball::x_splice;
+std::vector<float>* Ball::y_splice;
 Shader Ball::shader_static;
-Mesh Ball::mesh_static;
 
 void Ball::load() {
     vertexShaderSource_static =
@@ -40,15 +41,27 @@ void Ball::load() {
         {0, 1, 2,
          2, 3, 0};
 
+    x_splice =  new std::vector<float>
+        {1, 0,
+         1, 0,
+         1, 0,
+         1, 0};
+
+    y_splice =  new std::vector<float>
+        {0, 1,
+         0, 1,
+         0, 1,
+         0, 1};
+
     shader_static = Shader(vertexShaderSource_static, fragmentShaderSource_static, 2);
-    // TODO Pass in vector pointers insted of dereferencing or find a way not to copy the vectors.
-    mesh_static = Mesh(vertices_static, shader_static, index_buffer_static);
 }
 
 void Ball::unload() {
     delete vertices_static;
     delete index_buffer_static;
+    delete x_splice;
+    delete y_splice;
 }
 
-Ball::Ball(): Entity(&Ball::shader_static, &Ball::mesh_static) {}
-
+Ball::Ball(): Entity(&Ball::shader_static, vertices_static, index_buffer_static, x_splice, y_splice) {
+}

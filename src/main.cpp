@@ -27,18 +27,13 @@ int main()
     // Loop until the user closes the window
     while (!glfwWindowShouldClose(window))
     {
-        // Resize the viewport
-        // int width, height;
-        // glfwGetFramebufferSize(window, &width, &height);
-        // glViewport(0, 0, width, height);
 
         // OpenGL Rendering related code
         glClear(GL_COLOR_BUFFER_BIT);
         glClearError();
 
-        // glUseProgram(ball.mesh.program);
-        // glBindVertexArray(ball.mesh.VAO);
-        // glDrawArrays(GL_TRIANGLES, 0, 6);  // TODO get vertex count statically
+        ball.move(0.1f, 0.3f);
+        scene.reBindEntities();
 
         glDrawElements(GL_TRIANGLES, scene.index_count, GL_UNSIGNED_INT, nullptr);
 

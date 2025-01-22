@@ -11,10 +11,11 @@ protected:
     static const char* fragmentShaderSource_static;
     static std::vector<float>* vertices_static;
     static std::vector<unsigned int>* index_buffer_static;
+    static std::vector<float>* x_splice;
+    static std::vector<float>* y_splice;
 
 public:
     static Shader shader_static;
-    static Mesh mesh_static;
 
     Ball();
     static void load();

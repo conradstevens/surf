@@ -4,14 +4,20 @@ Scene::Scene() :
     index_count(0) {
 }
 
-void Scene::addEntity(Entity entity){
-    entities.push_back(entity);
-    index_count += entity.mesh->index_buffer->size();
+void Scene::addEntity(Entity& entity) {
+    entities.push_back(&entity);
+    index_count += entity.mesh.index_buffer->size();
 }
 
 void Scene::bindEntities() {
-    for (Entity entity : entities) {
-        entity.mesh->bindToGPU();
+    for (Entity* entity : entities) {
+        entity->mesh.bindToGPU();
+    }
+}
+
+void Scene::reBindEntities() {
+    for (Entity* entity : entities) {
+        entity->mesh.reBindToGPU();
     }
 }
 
