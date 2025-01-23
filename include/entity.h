@@ -20,7 +20,10 @@ public:
         std::vector<float>* x_splice_,
         std::vector<float>* y_splice_);
 
+    virtual ~Entity() = default;
+
     void move(float x, float y);
+    virtual void step(long time) = 0;
 };
 
 

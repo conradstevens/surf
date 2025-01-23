@@ -17,25 +17,23 @@ int main()
     Scene scene{};
 
     Ball::load();
-    Ball ball{};
+    auto* ball_1 = new Ball{};
+    auto* ball_2 = new Ball{};
 
-    scene.addEntity(ball);
-    scene.bindEntities();
+    scene.addEntity(ball_1, 0.5f, 0.5f);
+    scene.addEntity(ball_2, 0.5f, -0.5f);
 
-    // ball.mesh->bindToGPU();
-
-    // Loop until the user closes the window
+    scene.startRender();
+    int i{};
+    bool d = true;
     while (!glfwWindowShouldClose(window))
     {
-
+        i ++;
         // OpenGL Rendering related code
         glClear(GL_COLOR_BUFFER_BIT);
         glClearError();
 
-        ball.move(0.1f, 0.3f);
-        scene.reBindEntities();
-
-        glDrawElements(GL_TRIANGLES, scene.index_count, GL_UNSIGNED_INT, nullptr);
+        scene.render();/**/
 
         glCheckError();
 
@@ -44,6 +42,10 @@ int main()
 
         // Poll for and process events
         glfwPollEvents();
+
+        if (d && i > 50) {
+            scene.removeEntity(ball_1);
+        }
     }
 
     glfwDestroyWindow(window);

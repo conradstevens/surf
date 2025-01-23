@@ -1,12 +1,16 @@
 #include "scene.h"
 
-Scene::Scene() :
-    index_count(0) {
+void Scene::addEntity(Entity* entity, float x, float y) {
+    entity->move(x, y);
+    entities.push_back(entity);
 }
 
-void Scene::addEntity(Entity& entity) {
-    entities.push_back(&entity);
-    index_count += entity.mesh.index_buffer->size();
+void Scene::removeEntity(Entity* entity) {
+    auto it = std::find(entities.begin(), entities.end(), entity);
+    if (it != entities.end()) {
+        entities.erase(it);
+        delete entity;
+    }
 }
 
 void Scene::bindEntities() {
@@ -15,9 +19,28 @@ void Scene::bindEntities() {
     }
 }
 
-void Scene::reBindEntities() {
-    for (Entity* entity : entities) {
-        entity->mesh.reBindToGPU();
-    }
+void Scene::startRender() {
+    time_last = std::chrono::high_resolution_clock::now();
+    fps_time_last = std::chrono::high_resolution_clock::now();
+    bindEntities();
 }
 
+void Scene::render() {
+    frame_count ++;
+    time_now = std::chrono::high_resolution_clock::now();
+    time_step = std::chrono::duration_cast<std::chrono::milliseconds>(time_now - time_last).count();
+
+    for (Entity* entity : entities) {
+        entity->step(time_step);
+        entity->mesh.reBindMeshToGPU();
+        glDrawElements(GL_TRIANGLES, entity->mesh.index_buffer->size(), GL_UNSIGNED_INT, nullptr);
+    }
+    time_last = std::chrono::high_resolution_clock::now();
+    std::this_thread::sleep_for(std::chrono::milliseconds(0));
+
+    if (std::chrono::duration_cast<std::chrono::milliseconds>(time_now - fps_time_last).count() > 1000) {
+        std::cout << "\rFPS: " << frame_count << std::flush;
+        frame_count = 0;
+        fps_time_last = std::chrono::high_resolution_clock::now();
+    }
+}

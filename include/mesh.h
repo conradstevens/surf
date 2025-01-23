@@ -32,8 +32,11 @@ public:
     GLuint createProgram(const char* vertex_shader_source, const char* fragment_shader_source);
 
     void move(float x, float y);
+
     void bindToGPU();
+    void reBindMeshToGPU();
     void reBindToGPU();
+    void reBindToGPU(GLuint program);
 
 };
 

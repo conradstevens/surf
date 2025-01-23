@@ -1,8 +1,4 @@
-#include <iostream>
-#include <ostream>
 #include "ball.h"
-#include "shader.h"
-#include "mesh.h"
 
 
 // Where all the Ball data is stored:
@@ -42,16 +38,10 @@ void Ball::load() {
          2, 3, 0};
 
     x_splice =  new std::vector<float>
-        {1, 0,
-         1, 0,
-         1, 0,
-         1, 0};
+        {1, 0, 1, 0, 1, 0, 1, 0};
 
     y_splice =  new std::vector<float>
-        {0, 1,
-         0, 1,
-         0, 1,
-         0, 1};
+        {0, 1, 0, 1, 0, 1, 0, 1};
 
     shader_static = Shader(vertexShaderSource_static, fragmentShaderSource_static, 2);
 }
@@ -63,5 +53,27 @@ void Ball::unload() {
     delete y_splice;
 }
 
-Ball::Ball(): Entity(&Ball::shader_static, vertices_static, index_buffer_static, x_splice, y_splice) {
+Ball::Ball(): Entity(&Ball::shader_static, vertices_static, index_buffer_static, x_splice, y_splice),
+    direction({-1.0f, -2.0f}),
+    speed(0.0001f) {
 }
+
+void Ball::step(long time) {
+    float move_increment = time * speed;
+    float angle = atan(direction[1] / direction[0]);
+    float x_increment = move_increment * cos(angle);
+    float y_increment = move_increment * sin(angle);
+
+    x_increment = fabs(x_increment);
+    y_increment = fabs(y_increment);
+
+    if (direction[0] < 0.0f) {
+        x_increment = -x_increment;
+    } if (direction[1] < 0.0f) {
+        y_increment = -y_increment;
+    }
+
+    move(x_increment, y_increment);
+}
+
+

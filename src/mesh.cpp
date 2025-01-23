@@ -33,12 +33,23 @@ void Mesh::bindToGPU() {
     glUseProgram(program);
 }
 
-void Mesh::reBindToGPU() {
+void Mesh::reBindMeshToGPU() {
+    glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, render_vertices.size() * sizeof(float), render_vertices.data(), GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer->size() * sizeof(unsigned int), index_buffer->data(), GL_STATIC_DRAW);
+}
+
+void Mesh::reBindToGPU() {
+    reBindMeshToGPU();
+    glUseProgram(program);
+}
+
+void Mesh::reBindToGPU(GLuint program) {
+    reBindToGPU();
+    glUseProgram(program);
 }
 
 GLuint Mesh::createProgram(const char* vertex_shader_source, const char* fragment_shader_source) {
@@ -68,9 +79,12 @@ GLuint Mesh::createProgram(const char* vertex_shader_source, const char* fragmen
 }
 
 void Mesh::move(float x, float y) {
-    x_move = Eigen::Map<Eigen::VectorXf>(x_splice->data(), x_splice->size());
-    y_move = Eigen::Map<Eigen::VectorXf>(y_splice->data(), y_splice->size());
-    render_vertices = Eigen::Map<Eigen::VectorXf>(vertices->data(), vertices->size());
+    Eigen::VectorXf x_move = Eigen::Map<Eigen::VectorXf>(x_splice->data(), x_splice->size());
+    Eigen::VectorXf y_move = Eigen::Map<Eigen::VectorXf>(y_splice->data(), y_splice->size());
+
+    // x_move = Eigen::Map<Eigen::VectorXf>(x_splice->data(), x_splice->size());
+    // y_move = Eigen::Map<Eigen::VectorXf>(y_splice->data(), y_splice->size());
+    // render_vertices = Eigen::Map<Eigen::VectorXf>(vertices->data(), vertices->size());
 
     x_move = x_move * x;
     y_move = y_move * y;
