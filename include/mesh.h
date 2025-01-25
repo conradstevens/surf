@@ -10,34 +10,39 @@
 #include <Eigen/Dense>
 #include "shader.h"
 
+
 class Mesh {
 public:
     Shader shader;
     std::vector<float>* vertices;
     std::vector<unsigned int>* index_buffer;
 
-    std::vector<float>* x_splice;
-    std::vector<float>* y_splice;
-    Eigen::VectorXf x_move;
-    Eigen::VectorXf y_move;
-    Eigen::VectorXf render_vertices;
+    std::vector<float*> render_vertices_ptrs;
+    std::vector<float> deref_render;
+    Eigen::VectorXf x_vec;
+    Eigen::VectorXf y_vec;
+    Eigen::VectorXf x_vec_orig;
+    Eigen::VectorXf y_vec_orig;
 
     GLuint program, VAO, VBO, ibo;
 
-    Mesh(std::vector<float>* vertices, Shader &shader, std::vector<unsigned int>* index_buffer,
-        std::vector<float>* x_splice, std::vector<float>* y_splice);
+
+    Mesh(std::vector<float>* vertices_, Shader &shader_, std::vector<unsigned int>* index_buffer_);
+
     Mesh() = default;
 
     static unsigned int compileShader(unsigned int type, const char* source);
     GLuint createProgram(const char* vertex_shader_source, const char* fragment_shader_source);
 
     void move(float x, float y);
-    void position(float x, float y);
 
     void bindToGPU();
     void reBindMeshToGPU();
     void reBindToGPU();
     void reBindToGPU(GLuint program);
+
+protected:
+    void derefEigenVector();
 
 };
 

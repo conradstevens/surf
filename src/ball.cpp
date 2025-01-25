@@ -6,8 +6,6 @@ const char* Ball::vertexShaderSource_static;
 const char* Ball::fragmentShaderSource_static;
 std::vector<float>* Ball::vertices_static;
 std::vector<unsigned int>* Ball::index_buffer_static;
-std::vector<float>* Ball::x_splice;
-std::vector<float>* Ball::y_splice;
 Shader Ball::shader_static;
 
 void Ball::load() {
@@ -37,24 +35,16 @@ void Ball::load() {
         {0, 1, 2,
          2, 3, 0};
 
-    x_splice =  new std::vector<float>
-        {1, 0, 1, 0, 1, 0, 1, 0};
-
-    y_splice =  new std::vector<float>
-        {0, 1, 0, 1, 0, 1, 0, 1};
-
     shader_static = Shader(vertexShaderSource_static, fragmentShaderSource_static, 2);
 }
 
 void Ball::unload() {
     delete vertices_static;
     delete index_buffer_static;
-    delete x_splice;
-    delete y_splice;
 }
 
-Ball::Ball(): Entity(&Ball::shader_static, vertices_static, index_buffer_static, x_splice, y_splice,
-    Loc{0.0f, 0.0f, 0.071f, 0.071f}),
+Ball::Ball(): Entity(&Ball::shader_static, vertices_static, index_buffer_static,
+        Loc{0.0f, 0.0f, 0.071f, 0.071f}),
     direction({-1.0f, -2.0f}),
     speed(0.0005f) {
 }

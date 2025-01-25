@@ -19,24 +19,16 @@ struct Loc {
 class Entity {
 
 public:
-    Shader* shader = nullptr;
+    Shader* shader{};
     Mesh mesh;
     Loc loc;
 
     Entity(Shader* shader_, Mesh& mesh_);
 
-    Entity(Shader* shader_,
-        std::vector<float>* vertices_,
-        std::vector<unsigned int>* index_buffer_,
-        std::vector<float>* x_splice_,
-        std::vector<float>* y_splice_);
-
     Entity(Shader *shader_,
-        std::vector<float> *vertices_,
-        std::vector<unsigned int> *index_buffer_,
-        std::vector<float> *x_splice_,
-        std::vector<float> *y_splice_,
-        Loc loc_);
+           std::vector<float>* vertices_,
+           std::vector<unsigned int>* index_buffer_,
+           Loc loc_);
 
     virtual ~Entity() = default;
 

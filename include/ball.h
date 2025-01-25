@@ -18,8 +18,6 @@ protected:
     static const char* fragmentShaderSource_static;
     static std::vector<float>* vertices_static;
     static std::vector<unsigned int>* index_buffer_static;
-    static std::vector<float>* x_splice;
-    static std::vector<float>* y_splice;
 
     std::vector<float> direction;
     float speed;  // percent to move across the screen in 1 millisecond

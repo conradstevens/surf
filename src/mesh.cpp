@@ -1,27 +1,39 @@
 #include "mesh.h"
 
 
-Mesh::Mesh(std::vector<float>* vertices, Shader& shader, std::vector<unsigned int>* index_buffer,
-    std::vector<float>* x_splice, std::vector<float>* y_splice) :
-    shader(shader),
-    vertices(vertices),
+Mesh::Mesh(std::vector<float>* vertices_, Shader& shader_, std::vector<unsigned int>* index_buffer_) :
+    shader(shader_),
+    vertices(vertices_),
+    index_buffer(index_buffer_),
     program(createProgram(shader.vertex_shader_source, shader.fragment_shader_source)),
-    index_buffer(index_buffer),
-    x_splice(x_splice),
-    y_splice(y_splice),
-    // Copies contents of x/y_splices to initialize memory for them
-    x_move(Eigen::Map<Eigen::VectorXf>(x_splice->data(), x_splice->size())),
-    y_move(Eigen::Map<Eigen::VectorXf>(y_splice->data(), y_splice->size())),
-    render_vertices(Eigen::Map<Eigen::VectorXf>(vertices->data(), vertices->size())){
+    render_vertices_ptrs(vertices_->size()),
+    x_vec(vertices_->size() / 2),
+    y_vec(vertices_->size() / 2),
+    x_vec_orig(vertices_->size() / 2),
+    y_vec_orig(vertices_->size() / 2),
+    deref_render(vertices_->size())
+    {
+    // Copy vertex data to x and y vectors and initialize render vertex as pointers to these
+    for (unsigned int i = 0; i < vertices->size() / 2; ++i) {
+        x_vec[i] = vertices->data()[i*2];
+        y_vec[i] = vertices->data()[i*2 + 1];
+        x_vec_orig[i] = vertices->data()[i*2];
+        y_vec_orig[i] = vertices->data()[i*2 + 1];
+
+        render_vertices_ptrs[i*2] = &(x_vec[i]);
+        render_vertices_ptrs[i*2 + 1] = &(y_vec[i]);
+    }
 }
 
 void Mesh::bindToGPU() {
+    derefEigenVector();
+
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, render_vertices.size() * sizeof(float), render_vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, deref_render.size() * sizeof(float), deref_render.data(), GL_STATIC_DRAW);
 
     glGenBuffers(1, &ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
@@ -34,9 +46,11 @@ void Mesh::bindToGPU() {
 }
 
 void Mesh::reBindMeshToGPU() {
+    derefEigenVector();
+
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, render_vertices.size() * sizeof(float), render_vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, deref_render.size() * sizeof(float), deref_render.data(), GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer->size() * sizeof(unsigned int), index_buffer->data(), GL_STATIC_DRAW);
@@ -50,6 +64,12 @@ void Mesh::reBindToGPU() {
 void Mesh::reBindToGPU(GLuint program) {
     reBindToGPU();
     glUseProgram(program);
+}
+
+void Mesh::derefEigenVector() {
+    for (unsigned int i = 0; i < render_vertices_ptrs.size(); ++i) {
+        deref_render[i] = *(render_vertices_ptrs[i]);
+    }
 }
 
 GLuint Mesh::createProgram(const char* vertex_shader_source, const char* fragment_shader_source) {
@@ -99,15 +119,6 @@ GLuint Mesh::compileShader(const GLuint type, const char* source) {
 }
 
 void Mesh::move(float x, float y) {
-    Eigen::VectorXf x_move = Eigen::Map<Eigen::VectorXf>(x_splice->data(), x_splice->size());
-    Eigen::VectorXf y_move = Eigen::Map<Eigen::VectorXf>(y_splice->data(), y_splice->size());
-
-    x_move = x_move * x;
-    y_move = y_move * y;
-    render_vertices += x_move + y_move;
-}
-
-void Mesh::position(float x, float y) {
-    render_vertices(Eigen::Map<Eigen::VectorXf>(vertices->data(), vertices->size()));
-    move(x, y);
+    x_vec = x_vec.array() + x;
+    y_vec = y_vec.array() + y;
 }
