@@ -20,20 +20,19 @@ int main()
     auto* ball_1 = new Ball{};
     auto* ball_2 = new Ball{};
 
+    ball_1->scale(0.5);
+
     scene.addEntity(ball_1, 0.5f, 0.5f);
     scene.addEntity(ball_2, 0.5f, -0.5f);
 
     scene.startRender();
-    int i{};
-    bool d = true;
     while (!glfwWindowShouldClose(window))
     {
-        i ++;
         // OpenGL Rendering related code
         glClear(GL_COLOR_BUFFER_BIT);
         glClearError();
 
-        scene.render();/**/
+        scene.render();
 
         glCheckError();
 
@@ -42,10 +41,6 @@ int main()
 
         // Poll for and process events
         glfwPollEvents();
-
-        if (d && i > 50) {
-            scene.removeEntity(ball_1);
-        }
     }
 
     glfwDestroyWindow(window);

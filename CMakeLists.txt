@@ -30,15 +30,15 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include/)
 
 
 # Package Requirements
-find_package(OpenGL REQUIRED)
-target_link_libraries(${PROJECT_NAME} OpenGL::GL)
+#find_package(OpenGL REQUIRED)
+#target_link_libraries(${PROJECT_NAME} OpenGL::GL)
 
 find_package(Eigen3 3.3 REQUIRED)
 target_link_libraries(${PROJECT_NAME} Eigen3::Eigen)
 
 
 
-find_package(GLEW REQUIRED)
+#find_package(GLEW REQUIRED)
 
 
 

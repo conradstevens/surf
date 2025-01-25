@@ -1,7 +1,7 @@
 #include "scene.h"
 
 void Scene::addEntity(Entity* entity, float x, float y) {
-    entity->move(x, y);
+    entity->position(x, y);
     entities.push_back(entity);
 }
 
@@ -31,13 +31,18 @@ void Scene::render() {
     time_step = std::chrono::duration_cast<std::chrono::milliseconds>(time_now - time_last).count();
 
     for (Entity* entity : entities) {
-        entity->step(time_step);
-        entity->mesh.reBindMeshToGPU();
-        glDrawElements(GL_TRIANGLES, entity->mesh.index_buffer->size(), GL_UNSIGNED_INT, nullptr);
+        if (entity->isInBounds()) {
+            removeEntity(entity);
+        } else {
+            entity->step(time_step);
+            entity->mesh.reBindMeshToGPU();
+            glDrawElements(GL_TRIANGLES, entity->mesh.index_buffer->size(), GL_UNSIGNED_INT, nullptr);
+        }
     }
     time_last = std::chrono::high_resolution_clock::now();
     std::this_thread::sleep_for(std::chrono::milliseconds(0));
 
+    // Calculate fps
     if (std::chrono::duration_cast<std::chrono::milliseconds>(time_now - fps_time_last).count() > 1000) {
         std::cout << "\rFPS: " << frame_count << std::flush;
         frame_count = 0;

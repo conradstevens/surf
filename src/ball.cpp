@@ -53,9 +53,10 @@ void Ball::unload() {
     delete y_splice;
 }
 
-Ball::Ball(): Entity(&Ball::shader_static, vertices_static, index_buffer_static, x_splice, y_splice),
+Ball::Ball(): Entity(&Ball::shader_static, vertices_static, index_buffer_static, x_splice, y_splice,
+    Loc{0.0f, 0.0f, 0.071f, 0.071f}),
     direction({-1.0f, -2.0f}),
-    speed(0.0001f) {
+    speed(0.0005f) {
 }
 
 void Ball::step(long time) {

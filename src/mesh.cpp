@@ -78,19 +78,6 @@ GLuint Mesh::createProgram(const char* vertex_shader_source, const char* fragmen
     return _program;
 }
 
-void Mesh::move(float x, float y) {
-    Eigen::VectorXf x_move = Eigen::Map<Eigen::VectorXf>(x_splice->data(), x_splice->size());
-    Eigen::VectorXf y_move = Eigen::Map<Eigen::VectorXf>(y_splice->data(), y_splice->size());
-
-    // x_move = Eigen::Map<Eigen::VectorXf>(x_splice->data(), x_splice->size());
-    // y_move = Eigen::Map<Eigen::VectorXf>(y_splice->data(), y_splice->size());
-    // render_vertices = Eigen::Map<Eigen::VectorXf>(vertices->data(), vertices->size());
-
-    x_move = x_move * x;
-    y_move = y_move * y;
-    render_vertices += x_move + y_move;
-}
-
 GLuint Mesh::compileShader(const GLuint type, const char* source) {
     const GLuint id = glCreateShader(type);
     glShaderSource(id, 1, &source, nullptr);
@@ -109,4 +96,18 @@ GLuint Mesh::compileShader(const GLuint type, const char* source) {
         glDeleteShader(id);
     }
     return id;
+}
+
+void Mesh::move(float x, float y) {
+    Eigen::VectorXf x_move = Eigen::Map<Eigen::VectorXf>(x_splice->data(), x_splice->size());
+    Eigen::VectorXf y_move = Eigen::Map<Eigen::VectorXf>(y_splice->data(), y_splice->size());
+
+    x_move = x_move * x;
+    y_move = y_move * y;
+    render_vertices += x_move + y_move;
+}
+
+void Mesh::position(float x, float y) {
+    render_vertices(Eigen::Map<Eigen::VectorXf>(vertices->data(), vertices->size()));
+    move(x, y);
 }
