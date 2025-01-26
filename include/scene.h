@@ -15,6 +15,8 @@ protected:
     std::chrono::steady_clock::time_point fps_time_last;
     int frame_count{};
 
+    virtual void step(float time_step) = 0;
+
 public:
     std::vector<Entity*> entities;
     float fps = {};

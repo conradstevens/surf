@@ -14,13 +14,7 @@ Entity::Entity(Shader *shader_,
     loc(loc_){
 }
 
-void Entity::move(float x, float y) {
-    loc.x += x;
-    loc.y += y;
-    mesh.move(x, y);
-}
-
-void Entity::position(float x, float y) {
+void Entity::setPosition(float x, float y) {
     float x_move = x - loc.x;
     float y_move = y - loc.y;
     loc.x = x;
@@ -28,12 +22,18 @@ void Entity::position(float x, float y) {
     mesh.move(x_move, y_move);
 }
 
-void Entity::scale(float s) {
+void Entity::setScale(float s) {
     mesh.x_vec_scaled = s * mesh.x_vec_orig;
     mesh.y_vec_scaled = s * mesh.y_vec_orig;
 
     mesh.x_vec.array() = mesh.x_vec_scaled.array() + loc.x;
     mesh.y_vec.array() = mesh.y_vec_scaled.array() + loc.y;
+}
+
+void Entity::move(float x, float y) {
+    loc.x += x;
+    loc.y += y;
+    mesh.move(x, y);
 }
 
 void Entity::rotate(float angle) {

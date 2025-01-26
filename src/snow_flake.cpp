@@ -1,14 +1,14 @@
-#include "ball.h"
+#include "snow_flake.h"
 
 
 // Where static Ball data is stored:
-const char* Ball::vertexShaderSource_static;
-const char* Ball::fragmentShaderSource_static;
-std::vector<float>* Ball::vertices_static;
-std::vector<unsigned int>* Ball::index_buffer_static;
-Shader Ball::shader_static;
+const char* SnowFlake::vertexShaderSource_static;
+const char* SnowFlake::fragmentShaderSource_static;
+std::vector<float>* SnowFlake::vertices_static;
+std::vector<unsigned int>* SnowFlake::index_buffer_static;
+Shader SnowFlake::shader_static;
 
-void Ball::load() {
+void SnowFlake::load() {
     vertexShaderSource_static =
         "#version 410 core\n"
         "layout (location = 0) in vec3 aPos;\n"
@@ -22,36 +22,50 @@ void Ball::load() {
         "out vec4 FragColor;\n"
         "void main()\n"
         "{\n"
-        "   FragColor = vec4(0.0f, 0.5f, 1.0f, 1.0f);\n"
+        "   FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);\n"
         "}\0";
 
     vertices_static =  new std::vector<float>
-        {-0.05f, -0.05f,
-         0.05f, -0.05f,
-         0.05f,  0.05f,
-        -0.05f,  0.05f};
+        {0.00, -0.01,
+        -0.01, -0.02,
+        -0.01, -0.01,
+        -0.02, -0.01,
+        -0.01, 0.00,
+        -0.02, 0.01,
+        -0.01, 0.01,
+        -0.01, 0.02,
+        0.00, 0.01,
+        0.01, 0.02,
+        0.01, 0.01,
+        0.02, 0.01,
+        0.01, 0.00,
+        0.02, -0.01,
+        0.01, -0.01,
+        0.01, -0.02};
 
     index_buffer_static = new std::vector<unsigned int>
-        {0, 1, 2,
-         2, 3, 0};
+        {7, 12, 1,
+         4, 9, 15,
+         5, 11, 0,
+         3, 8, 13};
 
     shader_static = Shader(vertexShaderSource_static, fragmentShaderSource_static, 2);
 }
 
-void Ball::unload() {
+void SnowFlake::unload() {
     delete vertices_static;
     delete index_buffer_static;
 }
 
-Ball::Ball(): Entity(&Ball::shader_static, vertices_static, index_buffer_static,
+SnowFlake::SnowFlake(): Entity(&SnowFlake::shader_static, vertices_static, index_buffer_static,
         Loc{0.0f, 0.0f, 0.071f, 0.071f}),
     direction({-1.0f, -2.0f}),
     speed(0.0005f),
     rpm(1.0f){
 }
 
-Ball::Ball(float scale_, std::vector<float> direction_, float speed_, float rpm_):
-    Entity(&Ball::shader_static, vertices_static, index_buffer_static,
+SnowFlake::SnowFlake(float scale_, std::vector<float> direction_, float speed_, float rpm_):
+    Entity(&SnowFlake::shader_static, vertices_static, index_buffer_static,
         Loc{0.0f, 0.0f, 0.071f * 2, 0.071f * 2}),
     scale(scale_),
     direction(std::move(direction_)),
@@ -60,7 +74,7 @@ Ball::Ball(float scale_, std::vector<float> direction_, float speed_, float rpm_
     setScale(scale);
 }
 
-void Ball::step(long time) {
+void SnowFlake::step(long time) {
     // Move
     float move_increment = time * speed;
     float angle = atan(direction[1] / direction[0]);

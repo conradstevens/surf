@@ -32,9 +32,9 @@ public:
 
     virtual ~Entity() = default;
 
+    void setPosition(float x, float y);
+    void setScale(float s);
     void move(float x, float y);
-    void position(float x, float y);
-    void scale(float s);
     void rotate(float angle);
     bool isInBounds();
 

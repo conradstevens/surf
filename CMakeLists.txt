@@ -21,6 +21,10 @@ add_executable(${PROJECT_NAME}
             src/scene.cpp
         include/entity.h
             src/entity.cpp
+        include/snow_scene.h
+            src/snow_scene.cpp
+        include/snow_flake.h
+            src/snow_flake.cpp
 )
 
 

@@ -14,10 +14,12 @@
 
 class Mesh {
 public:
+    // Potentially shared accross entity types
     Shader shader;
     std::vector<float>* vertices;
     std::vector<unsigned int>* index_buffer;
 
+    // Unique to individual meshes
     std::vector<float*> render_vertices_ptrs;
     std::vector<float> deref_render;
     Eigen::VectorXf x_vec;

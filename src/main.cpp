@@ -8,31 +8,24 @@
 #include "glfw_ancillary.h"
 #include "ball.h"
 #include "scene.h"
+#include "snow_scene.h"
 
 
 int main()
 {
     GLFWwindow* window = initWindow();
-    Scene scene{};
+    SnowScene snow_scene{};
 
-    Ball::load();
-    auto* ball_1 = new Ball{};
-    auto* ball_2 = new Ball{};
+    snow_scene.spawn_random_snow();
 
-    ball_1->scale(0.5);
-    ball_2->rotate(0.1);
-
-    scene.addEntity(ball_1, 0.5f, 0.5f);
-    scene.addEntity(ball_2, 0.5f, -0.5f);
-
-    scene.startRender();
+    snow_scene.startRender();
     while (!glfwWindowShouldClose(window))
     {
         // OpenGL Rendering related code
         glClear(GL_COLOR_BUFFER_BIT);
         glClearError();
 
-        scene.render();
+        snow_scene.render();
 
         glCheckError();
 

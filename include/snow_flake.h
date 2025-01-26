@@ -1,5 +1,6 @@
-#ifndef BALL_H
-#define BALL_H
+#ifndef SNOW_FLAKE_H
+#define SNOW_FLAKE_H
+
 #include <cmath>
 #include "entity.h"
 #include <utility>
@@ -9,7 +10,7 @@
 #include "mesh.h"
 
 
-class Ball : public Entity{
+class SnowFlake : public Entity{
 
 protected:
     // Rendering Data
@@ -30,11 +31,11 @@ public:
     static void load();
     static void unload();
 
-    Ball();
-    Ball(float scale_, std::vector<float> direction_, float speed_, float rotation_);
+    SnowFlake();
+    SnowFlake(float scale_, std::vector<float> direction_, float speed_, float rotation_);
 
     void step(long time) override;
 };
 
 
-#endif //BALL_H
+#endif //SNOW_FLAKE_H

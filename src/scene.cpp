@@ -1,7 +1,8 @@
 #include "scene.h"
 
 void Scene::addEntity(Entity* entity, float x, float y) {
-    entity->position(x, y);
+    entity->setPosition(x, y);
+    entity->mesh.bindToGPU();
     entities.push_back(entity);
 }
 
@@ -29,6 +30,8 @@ void Scene::render() {
     frame_count ++;
     time_now = std::chrono::high_resolution_clock::now();
     time_step = std::chrono::duration_cast<std::chrono::milliseconds>(time_now - time_last).count();
+
+    step(time_step);
 
     for (Entity* entity : entities) {
         if (entity->isInBounds()) {
