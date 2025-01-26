@@ -32,21 +32,6 @@ add_executable(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/lib/include/)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include/)
 
-
-# Package Requirements
-#find_package(OpenGL REQUIRED)
-#target_link_libraries(${PROJECT_NAME} OpenGL::GL)
-
-find_package(Eigen3 3.3 REQUIRED)
-target_link_libraries(${PROJECT_NAME} Eigen3::Eigen)
-
-
-
-#find_package(GLEW REQUIRED)
-
-
-
-
 # Local Binaries
 target_link_libraries(${PROJECT_NAME}
         ${CMAKE_SOURCE_DIR}/lib/binaries/GLFW/libglfw.3.4.dylib  # Cannot build static library
@@ -56,3 +41,6 @@ target_link_libraries(${PROJECT_NAME}
         "-framework CoreVideo"
         "-framework CoreFoundation"
 )
+
+find_package(Eigen3 3.3 REQUIRED)
+target_link_libraries(${PROJECT_NAME} Eigen3::Eigen)
