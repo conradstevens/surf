@@ -2,9 +2,7 @@ This was a short C++ project that uses OpenGL to render snow falling down a scre
 Using an M1 I get an FPS of around 120.
 
 
-
-https://github.com/user-attachments/assets/138ceb25-cb00-408c-87d1-c0b76ad3ce7b
-
+https://github.com/user-attachments/assets/d543b251-0ac5-416c-bc07-bc5058910a4b
 
 
 Some future enhancements would be to use batch rendering and more memory safe and effecient entity trackers.
