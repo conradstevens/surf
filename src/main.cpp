@@ -10,7 +10,6 @@
 #include "scene.h"
 
 
-
 int main()
 {
     GLFWwindow* window = initWindow();
@@ -21,6 +20,7 @@ int main()
     auto* ball_2 = new Ball{};
 
     ball_1->scale(0.5);
+    ball_2->rotate(0.1);
 
     scene.addEntity(ball_1, 0.5f, 0.5f);
     scene.addEntity(ball_2, 0.5f, -0.5f);

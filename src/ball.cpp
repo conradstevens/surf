@@ -46,10 +46,12 @@ void Ball::unload() {
 Ball::Ball(): Entity(&Ball::shader_static, vertices_static, index_buffer_static,
         Loc{0.0f, 0.0f, 0.071f, 0.071f}),
     direction({-1.0f, -2.0f}),
-    speed(0.0005f) {
+    speed(0.0005f),
+    rpm(1.0f){
 }
 
 void Ball::step(long time) {
+    // Move
     float move_increment = time * speed;
     float angle = atan(direction[1] / direction[0]);
     float x_increment = move_increment * cos(angle);
@@ -65,6 +67,11 @@ void Ball::step(long time) {
     }
 
     move(x_increment, y_increment);
+
+    // Rotate
+    float rotation_step = rpm * time / 1000 * 2 * 3.14159265f;
+    loc.angle += rotation_step;
+    rotate(loc.angle);
 }
 
 

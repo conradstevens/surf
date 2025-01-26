@@ -11,6 +11,8 @@ Mesh::Mesh(std::vector<float>* vertices_, Shader& shader_, std::vector<unsigned 
     y_vec(vertices_->size() / 2),
     x_vec_orig(vertices_->size() / 2),
     y_vec_orig(vertices_->size() / 2),
+    x_vec_scaled(vertices_->size() / 2),
+    y_vec_scaled(vertices_->size() / 2),
     deref_render(vertices_->size())
     {
     // Copy vertex data to x and y vectors and initialize render vertex as pointers to these
@@ -19,6 +21,8 @@ Mesh::Mesh(std::vector<float>* vertices_, Shader& shader_, std::vector<unsigned 
         y_vec[i] = vertices->data()[i*2 + 1];
         x_vec_orig[i] = vertices->data()[i*2];
         y_vec_orig[i] = vertices->data()[i*2 + 1];
+        x_vec_scaled[i] = vertices->data()[i*2];
+        y_vec_scaled[i] = vertices->data()[i*2 + 1];
 
         render_vertices_ptrs[i*2] = &(x_vec[i]);
         render_vertices_ptrs[i*2 + 1] = &(y_vec[i]);
@@ -119,6 +123,6 @@ GLuint Mesh::compileShader(const GLuint type, const char* source) {
 }
 
 void Mesh::move(float x, float y) {
-    x_vec = x_vec.array() + x;
-    y_vec = y_vec.array() + y;
+    x_vec.array() = x_vec.array() + x;
+    y_vec.array() = y_vec.array() + y;
 }

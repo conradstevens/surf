@@ -29,14 +29,22 @@ void Entity::position(float x, float y) {
 }
 
 void Entity::scale(float s) {
-    mesh.x_vec = s * mesh.x_vec_orig.array() + loc.x;
-    mesh.y_vec = s * mesh.y_vec_orig.array() + loc.y;
+    mesh.x_vec_scaled = s * mesh.x_vec_orig;
+    mesh.y_vec_scaled = s * mesh.y_vec_orig;
+
+    mesh.x_vec.array() = mesh.x_vec_scaled.array() + loc.x;
+    mesh.y_vec.array() = mesh.y_vec_scaled.array() + loc.y;
 }
 
 void Entity::rotate(float angle) {
-    // todo
     float c = cos(angle);
     float s = sin(angle);
+
+    mesh.x_vec = c * mesh.x_vec_scaled - s * mesh.y_vec_scaled;
+    mesh.y_vec = s * mesh.x_vec_scaled + c * mesh.y_vec_scaled;
+
+    mesh.x_vec.array() = mesh.x_vec.array() + loc.x;
+    mesh.y_vec.array() = mesh.y_vec.array() + loc.y;
 }
 
 bool Entity::isInBounds() {

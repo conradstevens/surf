@@ -20,7 +20,8 @@ protected:
     static std::vector<unsigned int>* index_buffer_static;
 
     std::vector<float> direction;
-    float speed;  // percent to move across the screen in 1 millisecond
+    float speed{};  // percent to move across the screen in 1 millisecond
+    float rpm{}; // rotations per second
 
 public:
     static Shader shader_static;

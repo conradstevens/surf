@@ -9,6 +9,7 @@
 #include <vector>
 #include <Eigen/Dense>
 #include "shader.h"
+#include <cmath>
 
 
 class Mesh {
@@ -23,6 +24,8 @@ public:
     Eigen::VectorXf y_vec;
     Eigen::VectorXf x_vec_orig;
     Eigen::VectorXf y_vec_orig;
+    Eigen::VectorXf x_vec_scaled;
+    Eigen::VectorXf y_vec_scaled;
 
     GLuint program, VAO, VBO, ibo;
 
@@ -35,6 +38,7 @@ public:
     GLuint createProgram(const char* vertex_shader_source, const char* fragment_shader_source);
 
     void move(float x, float y);
+    void rotate(float angle);
 
     void bindToGPU();
     void reBindMeshToGPU();
