@@ -1,39 +1,42 @@
+#include <stdio.h>
+#define GL_SILENCE_DEPRECATION
+#define GLFW_INCLUDE_NONE  //  Ensures gl3.h is included rather than gl.h
 #include <iostream>
-#include "GLFW/glfw3.h"
-#include "head.h"
+#include <vector>
+#include <GLFW/glfw3.h>  // OpenGL includes after include glfw3
+#include <OpenGL/gl3.h>
+#include "glfw_ancillary.h"
+#include "ball.h"
+#include "scene.h"
+#include "snow_scene.h"
 
-int main(void)
+
+int main()
 {
-    GLFWwindow* window;
+    GLFWwindow* window = initWindow();
+    SnowScene snow_scene{};
 
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
+    snow_scene.spawn_random_snow();
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
-
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
-
-    /* Loop until the user closes the window */
+    snow_scene.startRender();
     while (!glfwWindowShouldClose(window))
     {
-        /* Render here */
+        // OpenGL Rendering related code
         glClear(GL_COLOR_BUFFER_BIT);
+        glClearError();
 
-        /* Swap front and back buffers */
+        snow_scene.render();
+
+        glCheckError();
+
+        // Swap front and back buffers
         glfwSwapBuffers(window);
 
-        /* Poll for and process events */
+        // Poll for and process events
         glfwPollEvents();
     }
 
+    glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
 }
