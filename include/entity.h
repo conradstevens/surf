@@ -2,26 +2,25 @@
 #define ENTITY_H
 #include "shader.h"
 #include "mesh.h"
+#include "loc.h"
 #include <vector>
 #include <cmath>
 
-
-struct Loc {
-    float x{}, y{};
-    float x_buf{}, y_buf{};
-    float angle{};
-
-    Loc() = default;
-    Loc(float x, float y) : x{x}, y{y} {}
-    Loc(float x, float y, float x_buf, float y_buf) : x{x}, y{y}, x_buf{x_buf}, y_buf{y_buf} {}
-};
-
+/**
+ * @brief Abstract class of entities that are rendered in a scene
+ * @note Reused const elements are passed by reference
+ * @note properties that are shared across entities of the same type are const static in their derived classes
+ */
 class Entity {
-
+    /**
+     * @param shader the objects shader
+     * @param mesh the objects mesh
+     * @param loc the objects location and kinematics
+     */
 public:
     Shader* shader{};
-    Mesh mesh;
-    Loc loc;
+    Mesh mesh{};
+    Loc loc{};
 
     Entity(Shader* shader_, Mesh& mesh_);
 

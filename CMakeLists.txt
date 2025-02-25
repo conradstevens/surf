@@ -16,7 +16,6 @@ add_executable(${PROJECT_NAME}
         include/mesh.h
             src/mesh.cpp
         include/shader.h
-            src/shader.cpp
         include/scene.h
             src/scene.cpp
         include/entity.h
@@ -25,6 +24,7 @@ add_executable(${PROJECT_NAME}
             src/snow_scene.cpp
         include/snow_flake.h
             src/snow_flake.cpp
+        include/loc.h
 )
 
 
