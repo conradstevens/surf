@@ -6,7 +6,6 @@ project(surf)
 
 # Executables
 add_executable(${PROJECT_NAME}
-        # lib headers
         # My files
         src/main.cpp
         # Entities
@@ -22,8 +21,7 @@ add_executable(${PROJECT_NAME}
             include/rendering/glfw_ancillary.h
                 src/rendering/glfw_ancillary.cpp
             include/rendering/mesh.h
-                src/rendering/mesh.cpp
-            include/rendering/shader.h
+        include/rendering/shader.h
             include/rendering/mesh_loader.h
 
         # Scene

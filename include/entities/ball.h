@@ -64,5 +64,7 @@ public:
      void step(long time) override;
 };
 
+template class Mesh<Ball::mesh_size, Ball::buffer_size>;
+
 
 #endif //BALL_H

@@ -20,8 +20,8 @@ public:
       * @param shader the objects shader
       * @param mesh the objects mesh
       */
-    static constexpr size_t mesh_size = 0;
-    static constexpr size_t buffer_size = 0;
+    static constexpr size_t mesh_size{};
+    static constexpr size_t buffer_size{};
     Mesh<mesh_size, buffer_size> mesh{};
 
     /**
@@ -110,6 +110,7 @@ public:
 /**
  * @brief Template type concept requiring the type is derived from the Entity class
  */
+
 template <typename T>
 concept EntityDerived = std::derived_from<T, Entity>;
 
