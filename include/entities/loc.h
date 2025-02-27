@@ -1,5 +1,11 @@
 #ifndef LOC_H
 #define LOC_H
+#include <vector>
+
+/**
+  * @brief Enum to determine X and Y axis
+  */
+ enum Axis {X, Y};
 
 /**
  * @brief Stores the basic kinematic and physical property data members of the object

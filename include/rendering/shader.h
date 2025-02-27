@@ -3,7 +3,7 @@
 
 /**
  * @brief loads and stores the shader data members of an object
- * Shaders are often static across an object as they are the same for all instances
+ * @note Shaders are often static across an object as they are the same for all instances
  */
 struct Shader {
     /**

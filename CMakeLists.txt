@@ -9,22 +9,28 @@ add_executable(${PROJECT_NAME}
         # lib headers
         # My files
         src/main.cpp
-        include/glfw_ancillary.h
-            src/glfw_ancillary.cpp
-        include/ball.h
-            src/ball.cpp
-        include/mesh.h
-            src/mesh.cpp
-        include/shader.h
-        include/scene.h
-            src/scene.cpp
-        include/entity.h
-            src/entity.cpp
-        include/snow_scene.h
-            src/snow_scene.cpp
-        include/snow_flake.h
-            src/snow_flake.cpp
-        include/loc.h
+        # Entities
+            include/entities/entity.h
+                src/entities/entity.cpp
+            include/entities/ball.h
+                src/entities/ball.cpp
+            include/entities/snow_flake.h
+                src/entities/snow_flake.cpp
+            include/entities/loc.h
+
+        # Rendering
+            include/rendering/glfw_ancillary.h
+                src/rendering/glfw_ancillary.cpp
+            include/rendering/mesh.h
+                src/rendering/mesh.cpp
+            include/rendering/shader.h
+            include/rendering/mesh_loader.h
+
+        # Scene
+            include/scenes/scene.h
+                src/scenes/scene.cpp
+            include/scenes/snow_scene.h
+                src/scenes/snow_scene.cpp
 )
 
 
