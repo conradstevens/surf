@@ -1,9 +1,5 @@
 #ifndef BALL_H
 #define BALL_H
-#include <cmath>
-#include <utility>
-#include <iostream>
-#include <ostream>
 #include "entity.h"
 #include "../rendering/mesh.h"
 
@@ -25,25 +21,13 @@ public:
       * @brief Getter for static data member method mesh_size
       * @return mesh size
       */
-    static size_t getMeshSize() {return mesh_size;}
+    GLsizei getMeshSize_virtual() override {return mesh_size;}
 
     /**
      * @brief Getter for static data member method buffer_size
      * @return buffer size
      */
-    static size_t getBufferSize() {return buffer_size;}
-
-    /**
-      * @brief Getter for static data member method mesh_size
-      * @return mesh size
-      */
-    size_t getMeshSize_virtual() override {return mesh_size;}
-
-    /**
-     * @brief Getter for static data member method buffer_size
-     * @return buffer size
-     */
-    size_t getBufferSize_virtual() override {return buffer_size;}
+    GLsizei getBufferSize_virtual() override {return buffer_size;}
 
      /**
       * Constructor giving object a new mesh copied from mesh_

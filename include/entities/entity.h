@@ -1,11 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
-#include "../rendering//shader.h"
 #include "../rendering/mesh.h"
 #include "loc.h"
-#include <vector>
-#include <cmath>
-
 
 /**
  * @brief Abstract class of entities that are rendered in a scene
@@ -28,25 +24,13 @@ public:
       * @brief Getter for static data member method mesh_size
       * @return mesh size
       */
-    static size_t getMeshSize() {return mesh_size;}
-
-    /**
-     * @brief Getter for static data member method buffer_size
-     * @return buffer size
-     */
-    static size_t getBufferSize() {return buffer_size;}
-
-    /**
-      * @brief Getter for static data member method mesh_size
-      * @return mesh size
-      */
-    virtual size_t getMeshSize_virtual() {return mesh_size;}
+    virtual GLsizei getMeshSize_virtual() {return mesh_size;}
 
      /**
       * @brief Getter for static data member method buffer_size
       * @return buffer size
       */
-     virtual size_t getBufferSize_virtual() {return buffer_size;}
+     virtual GLsizei getBufferSize_virtual() {return buffer_size;}
 
     /**
      * @brief Data members all entities have

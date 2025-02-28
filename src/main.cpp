@@ -7,14 +7,19 @@
 #include "rendering/glfw_ancillary.h"
 #include "scenes/scene.h"
 
+#include "rendering/mesh.h"
+#include "entities/ball.h"
+#include "rendering/mesh_loader.h"
+
 using namespace glfw_rendering;
 
 
 int main()
 {
     GLFWwindow* window = initWindow();
-    Scene scene{};
 
+    Scene<Ball> scene{};
+    scene.spawn<Ball>();
     scene.start();
     while (!glfwWindowShouldClose(window))
     {

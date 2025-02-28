@@ -1,18 +1,15 @@
 #ifndef MESH_H
 #define MESH_H
 #define GL_SILENCE_DEPRECATION
-#include <iostream>
 #define GL_SILENCE_DEPRECATION
 #define GLFW_INCLUDE_NONE  //  Ensures gl3.h is included rather than gl.h
 #include <OpenGL/gl3.h>
 #include <GLFW/glfw3.h>  // OpenGL includes after include glfw3
+#include <iostream>
 #include <Eigen/Dense>
-#include <functional>
 #include "shader.h"
-#include <cmath>
 #include "rendering/mesh.h"
 #include "entities/loc.h"
-#include "../entities/loc.h"
 
 
 /**
@@ -38,14 +35,11 @@ protected:
     const std::array<float, b_size> index_buffer{};
     Eigen::Matrix<float, v_size / 2, 1> x_vert{};
     Eigen::Matrix<float, v_size / 2, 1> y_vert{};
-    std::array<float*, v_size> render_vert_ptrs{};
-    std::array<float, v_size> render_vert{};
+    std::array<std::reference_wrapper<float>, v_size> render_vert{};
     GLuint program{};
     GLuint VAO{};
     GLuint VBO{};
     GLuint ibo{};
-
-    void dereference_vert();
 
     public:
     /**
@@ -71,6 +65,16 @@ protected:
     * @param vert_ full vertex not segmented
     */
     Mesh(const Shader& shader_, const std::array<float, b_size>& index_buffer_, const std::array<float, v_size>& vert_);
+
+    /**
+     * @brief Initialize a std::array of float references. The references themselves can be changed but as per the
+     * standard, they cannot change what they refer to.
+     * @note when initialized it will refer to dangling references of the array_dummy array.
+     * @tparam Is template parameter pack to replicate arr[1], arr[2], ...
+     * @return array of dangling float references
+     */
+    template<std::size_t... Is>
+    auto initRefArray(std::index_sequence<Is...>) -> std::array<std::reference_wrapper<float>, v_size>;
 
     /**
     * @brief Compile the vertex or fragment shader program
@@ -143,11 +147,6 @@ protected:
 
  };
 
-template<std::size_t v_size, std::size_t b_size>
-void Mesh<v_size, b_size>::dereference_vert() {
-    std::transform(render_vert_ptrs.begin(), render_vert_ptrs.end(), render_vert.begin(),
-                  [](float* ptr) { return *ptr; });
-}
 
 template <std::size_t v_size, std::size_t b_size>
 Mesh<v_size, b_size>::Mesh(const Shader& shader_, const std::array<float, b_size>& index_buffer_,
@@ -155,23 +154,33 @@ Mesh<v_size, b_size>::Mesh(const Shader& shader_, const std::array<float, b_size
     shader{shader_},
     index_buffer{index_buffer_},
     x_vert{x_vert_},
-    y_vert{y_vert_}{
+    y_vert{y_vert_},
+    render_vert{initRefArray(std::make_index_sequence<v_size>{})}{
     for (size_t i = 0; i < v_size / 2; ++i) {
-        render_vert_ptrs[i*2]     = &(x_vert[i]);
-        render_vert_ptrs[i*2 + 1] = &(y_vert[i]);
+        render_vert[i*2]     = std::ref(x_vert[i]);
+        render_vert[i*2 + 1] = std::ref(y_vert[i]);
     }
 }
 
 template <std::size_t v_size, std::size_t b_size>
 Mesh<v_size, b_size>::Mesh(const Shader& shader_, const std::array<float, b_size>& index_buffer_, const std::array<float, v_size> &vert_) :
     shader{shader_},
-    index_buffer{index_buffer_}{
+    index_buffer{index_buffer_},
+    render_vert(initRefArray(std::make_index_sequence<v_size>{})){
     for (size_t i = 1; i < v_size; ++(++i)) {
         x_vert[i - 1] = vert_[i - 1];
         x_vert[i]     = vert_[i];
-        render_vert_ptrs[i*2]     = &(x_vert[i]);
-        render_vert_ptrs[i*2 + 1] = &(y_vert[i]);
+        render_vert[i*2]     = std::ref(x_vert[i]);
+        render_vert[i*2 + 1] = std::ref(y_vert[i]);
     }
+}
+
+template<std::size_t v_size, std::size_t b_size>
+template<std::size_t... Is>
+auto Mesh<v_size, b_size>::initRefArray(std::index_sequence<Is...>) -> std::array<std::reference_wrapper<float>, v_size>{
+    std::array<float, v_size> dummy_array{};
+    std::array<std::reference_wrapper<float>, v_size> render_vert_ = {dummy_array[Is]...};
+    return render_vert_;
 }
 
 template <std::size_t v_size, std::size_t b_size>
